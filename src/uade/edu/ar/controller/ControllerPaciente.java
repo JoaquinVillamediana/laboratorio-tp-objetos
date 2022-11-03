@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ControllerPaciente {
 
@@ -34,15 +35,22 @@ public class ControllerPaciente {
     public void eliminarPaciente( int pacienteID )
     {
         int index = getIndex(pacienteID);
-        if(index != -1)
-        {
-            pacienteList.remove(index);
+
+        if(index != -1) {
+            try {
+                Paciente paciente = pacienteDao.search(pacienteID);
+                if(!paciente.tienePeticionesFinalizadas())
+                {
+                    pacienteList.remove(index);
+                    pacienteDao.delete(pacienteID);
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-        try {
-            pacienteDao.delete(pacienteID);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     public void crearPaciente(int dni, String nombre, String domicilio, String email, int edad)
@@ -65,15 +73,14 @@ public class ControllerPaciente {
 
     public void editarPaciente(int id, int dni, String nombre, String domicilio, String email, int edad)
     {
-        try {
-            Paciente paciente = pacienteDao.search(id);
 
+        Paciente paciente = getPacienteByIdAll(id);
+        if(Objects.nonNull(paciente)){
             paciente.setDni(dni);
             paciente.setNombre(nombre);
             paciente.setDomicilio(domicilio);
             paciente.setEmail(email);
             paciente.setEdad(edad);
-
             try {
                 Boolean status = pacienteDao.update(paciente);
                 System.out.print(status);
@@ -81,10 +88,27 @@ public class ControllerPaciente {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         }
+
+
+    }
+
+    public Paciente getPacienteByIdAll(int dni){
+
+        try {
+            for (Paciente p: getAllPaciente()){
+                if(p.getId() == dni)
+                    return p;
+            }
+        }catch (Exception ex){
+            System.out.println("Error al buscar el paciente: " + dni);
+        }
+        return null;
+    }
+
+
+    public static List<Paciente> getAllPaciente() throws Exception {
+        return pacienteDao.getAll(Paciente.class);
     }
 
 

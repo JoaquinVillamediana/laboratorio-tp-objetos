@@ -136,7 +136,6 @@ public abstract class GenericDAO<T> {
 
             while ((line = b.readLine()) != null) {
                 JsonObject jsonObject = parser.parse(line).getAsJsonObject();
-                //System.out.print(g.fromJson(jsonObject, clase));
                 if (g.fromJson(jsonObject, clase).equals(obj)) {
                     line = g.toJson(obj);
                     wasUpdate = true;
@@ -147,7 +146,7 @@ public abstract class GenericDAO<T> {
             b.close();
             String inputStr = inputBuffer.toString();
 
-            System.out.println(inputStr);
+            //System.out.println(inputStr);
 
             FileOutputStream fileOut = new FileOutputStream(archivo);
             fileOut.write(inputStr.getBytes());
@@ -158,6 +157,7 @@ public abstract class GenericDAO<T> {
         }
         return wasUpdate;
     }
+
 
     public T search(int id) throws FileNotFoundException {
         return search(id, clase);
@@ -171,8 +171,11 @@ public abstract class GenericDAO<T> {
         Boolean flag = false;
 
         try {
+
             while ((line = b.readLine()) != null && flag == false) {
+
                 JsonObject jsonObject = parser.parse(line).getAsJsonObject();
+
                 if (Integer.parseInt(jsonObject.get("id").toString()) == id) {
                     b.close();
                     return g.fromJson(jsonObject, clase);

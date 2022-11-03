@@ -1,5 +1,11 @@
 package uade.edu.ar.model;
 
+import uade.edu.ar.dao.PacienteDao;
+import uade.edu.ar.dao.PeticionDao;
+
+import java.io.File;
+import java.util.List;
+
 public class Paciente {
 
     private int id;
@@ -67,6 +73,23 @@ public class Paciente {
 
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    public Boolean tienePeticionesFinalizadas()
+    {
+        //try {
+        //    PeticionDao peticionDao = new PeticionDao(Peticion.class,getPathOutModel(Peticion.class.getSimpleName()));
+        //    List<Peticion> peticionList = peticionDao.getAll(Peticion.class);
+        //} catch (Exception e) {
+        //    throw new RuntimeException(e);
+        //}
+
+        return false;
+    }
+
+    private static String getPathOutModel(String name){
+        String dir = "D:/Escritorio/Facu/POO/TPO/data";
+        return  new File(dir+name+".json").getPath();
     }
 
     @Override

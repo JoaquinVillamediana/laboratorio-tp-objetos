@@ -18,7 +18,7 @@ public class App {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        cont.crearPaciente(123,"test","123412","asd@das.com",14);
+        //cont.crearPaciente(123,"test","123412","asd@das.com",14);
         //cont.eliminarPaciente(1);
         cont.editarPaciente(1,12345,"asd","ree 213","reeemplazo@sad.com",123);
     }
